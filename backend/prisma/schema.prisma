@@ -1,0 +1,121 @@
+// Esquema Prisma para la Plataforma de Eventos Universitarios
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// Enums (opciones)
+// ─────────────────────────────────────────────
+
+/// Estado del ciclo de vida de un evento
+enum EstadoEvento {
+  BORRADOR
+  PUBLICADO
+  CANCELADO
+  FINALIZADO
+}
+
+/// Estado de la inscripción de un estudiante a un evento
+enum EstadoInscripcion {
+  PENDIENTE
+  CONFIRMADA
+  CANCELADA
+}
+
+/// Tipo de espacio físico disponible en la universidad
+enum TipoEspacio {
+  AULA
+  AUDITORIO
+  LABORATORIO
+  CANCHA
+  OTRO
+}
+
+// ─────────────────────────────────────────────
+// Modelos
+// ─────────────────────────────────────────────
+
+
+
+/// Categoría o tipo de evento (Académico, Cultural, Deportivo, etc.)
+model TipoEvento {
+  id             Int      @id @default(autoincrement())
+  nombre         String   @unique
+  descripcion    String?
+  eventos        Evento[]
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+}
+
+/// Espacio físico donde se realizan los eventos
+model Espacio {
+  id             Int         @id @default(autoincrement())
+  nombre         String      @unique
+  ubicacion      String
+  capacidad      Int
+  tipo           TipoEspacio
+  disponible     Boolean     @default(true)
+  eventos        Evento[]
+  creadoEn       DateTime    @default(now())
+  actualizadoEn  DateTime    @updatedAt
+}
+
+/// Ponente o expositor que participa en eventos
+model Ponente {
+  id               Int      @id @default(autoincrement())
+  nombre           String
+  apellido         String
+  email            String   @unique
+  areasExperticia  String[]
+  institucion      String?
+  /// Relación many-to-many implícita con Evento
+  eventos          Evento[]
+  creadoEn         DateTime @default(now())
+  actualizadoEn    DateTime @updatedAt
+}
+
+/// Estudiante universitario que puede inscribirse a eventos
+model Estudiante {
+  id             Int           @id @default(autoincrement())
+  codigo         String        @unique
+  nombre         String
+  apellido       String
+  email          String        @unique
+  facultadId     Int
+  facultad       Facultad      @relation(fields: [facultadId], references: [id])
+  inscripciones  Inscripcion[]
+  creadoEn       DateTime      @default(now())
+  actualizadoEn  DateTime      @updatedAt
+}
+
+/// Evento universitario con cupos, espacio asignado y ponentes
+model Evento {
+  id               Int           @id @default(autoincrement())
+  titulo           String        @db.VarChar(200)
+  descripcion      String?
+  fechaInicio      DateTime
+  fechaFin         DateTime
+  cupoMaximo       Int
+  cuposDisponibles Int
+  estado           EstadoEvento  @default(BORRADOR)
+  tipoEventoId     Int
+  tipoEvento       TipoEvento    @relation(fields: [tipoEventoId], references: [id])
+  espacioId        Int
+  espacio          Espacio       @relation(fields: [espacioId], references: [id])
+  facultadId       Int
+  facultad         Facultad      @relation(fields: [facultadId], references: [id])
+  /// Relación many-to-many implícita con Ponente
+  ponentes         Ponente[]
+  inscripciones    Inscripcion[]
+  creadoEn         DateTime      @default(now())
+  actualizadoEn    DateTime      @updatedAt
+
+  @@index([fechaInicio])
+  @@index([espacioId])
+}
