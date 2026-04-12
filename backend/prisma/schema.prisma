@@ -10,7 +10,7 @@ datasource db {
 }
 
 // ─────────────────────────────────────────────
-// Enums (opciones)
+// Enums
 // ─────────────────────────────────────────────
 
 /// Estado del ciclo de vida de un evento
@@ -41,7 +41,16 @@ enum TipoEspacio {
 // Modelos
 // ─────────────────────────────────────────────
 
-
+/// Facultad universitaria que organiza eventos y agrupa estudiantes
+model Facultad {
+  id             Int         @id @default(autoincrement())
+  nombre         String      @unique
+  codigo         String      @unique
+  estudiantes    Estudiante[]
+  eventos        Evento[]
+  creadoEn       DateTime    @default(now())
+  actualizadoEn  DateTime    @updatedAt
+}
 
 /// Categoría o tipo de evento (Académico, Cultural, Deportivo, etc.)
 model TipoEvento {
@@ -118,4 +127,29 @@ model Evento {
 
   @@index([fechaInicio])
   @@index([espacioId])
+}
+
+/// Inscripción de un estudiante a un evento
+model Inscripcion {
+  id               Int               @id @default(autoincrement())
+  estudianteId     Int
+  estudiante       Estudiante        @relation(fields: [estudianteId], references: [id])
+  eventoId         Int
+  evento           Evento            @relation(fields: [eventoId], references: [id])
+  estado           EstadoInscripcion @default(PENDIENTE)
+  fechaInscripcion DateTime          @default(now())
+  asistencia       Asistencia?
+
+  @@unique([estudianteId, eventoId])
+  @@index([estudianteId, eventoId])
+}
+
+/// Registro de asistencia real de un estudiante inscrito
+model Asistencia {
+  id             Int          @id @default(autoincrement())
+  inscripcionId  Int          @unique
+  inscripcion    Inscripcion  @relation(fields: [inscripcionId], references: [id])
+  asistio        Boolean      @default(false)
+  horaRegistro   DateTime?
+  observaciones  String?
 }
