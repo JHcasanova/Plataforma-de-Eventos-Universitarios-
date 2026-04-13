@@ -3,7 +3,7 @@ import { PrismaClient, TipoEspacio, EstadoEvento } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Iniciando seed de datos...');
+  console.log('Iniciando seed de datos...');
 
   // ─── Facultades ───────────────────────────────────────────────
   const [ingenieria, ciencias, humanidades] = await Promise.all([
@@ -23,7 +23,7 @@ async function main() {
       create: { nombre: 'Facultad de Humanidades', codigo: 'FHUM' },
     }),
   ]);
-  console.log('✅ Facultades creadas');
+  console.log('Facultades creadas');
 
   // ─── Tipos de Evento ──────────────────────────────────────────
   const [tipoAcademico, tipoCultural, tipoDeportivo] = await Promise.all([
@@ -52,7 +52,7 @@ async function main() {
       },
     }),
   ]);
-  console.log('✅ Tipos de evento creados');
+  console.log('Tipos de evento creados');
 
   // ─── Espacios ─────────────────────────────────────────────────
   const [auditorio, aulaA, aulaB, cancha] = await Promise.all([
@@ -101,7 +101,7 @@ async function main() {
       },
     }),
   ]);
-  console.log('✅ Espacios creados');
+  console.log('Espacios creados');
 
   // ─── Ponentes ─────────────────────────────────────────────────
   const [ponente1, ponente2, ponente3] = await Promise.all([
@@ -139,7 +139,7 @@ async function main() {
       },
     }),
   ]);
-  console.log('✅ Ponentes creados');
+  console.log('Ponentes creados');
 
   // ─── Estudiantes ──────────────────────────────────────────────
   const [est1, est2, est3] = await Promise.all([
@@ -177,7 +177,7 @@ async function main() {
       },
     }),
   ]);
-  console.log('✅ Estudiantes creados');
+  console.log('Estudiantes creados');
 
   // ─── Eventos ──────────────────────────────────────────────────
   const ahora = new Date();
@@ -224,20 +224,20 @@ async function main() {
     },
   });
 
-  console.log('✅ Eventos creados');
-  console.log(`\n📋 Resumen del seed:`);
+  console.log(' Eventos creados');
+  console.log(`\n Resumen del seed:`);
   console.log(`   - 3 Facultades`);
   console.log(`   - 3 Tipos de evento`);
   console.log(`   - 4 Espacios`);
   console.log(`   - 3 Ponentes`);
   console.log(`   - 3 Estudiantes`);
   console.log(`   - 2 Eventos publicados`);
-  console.log('\n🎉 Seed completado exitosamente');
+  console.log('\n Seed completado exitosamente');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Error en el seed:', e);
+    console.error('Error en el seed:', e);
     process.exit(1);
   })
   .finally(async () => {

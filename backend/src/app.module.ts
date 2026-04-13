@@ -6,6 +6,8 @@ import { TiposEventoModule } from './modules/tipos-evento/tipos-evento.module';
 import { EspaciosModule } from './modules/espacios/espacios.module';
 import { PonentesModule } from './modules/ponentes/ponentes.module';
 import { EventosModule } from './modules/eventos/eventos.module';
+import { EstudiantesModule } from './modules/estudiantes/estudiantes.module';
+import { InscripcionesModule } from './modules/inscripciones/inscripciones.module';
 
 /**
  * Módulo raíz de la aplicación.
@@ -24,6 +26,10 @@ import { EventosModule } from './modules/eventos/eventos.module';
     PonentesModule,
     // Módulo de Eventos
     EventosModule,
+    // Módulo de Estudiantes
+    EstudiantesModule,
+    // Módulo de Inscripciones (HU-04 y HU-05)
+    InscripcionesModule,
   ],
 })
 export class AppModule {}
