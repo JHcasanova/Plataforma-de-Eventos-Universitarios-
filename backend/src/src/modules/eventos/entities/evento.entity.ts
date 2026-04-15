@@ -1,9 +1,5 @@
 import { EstadoEvento } from '@prisma/client';
 
-/**
- * Representa la entidad Evento en el dominio de la aplicación.
- * No usa decoradores de Prisma; es una clase TypeScript pura.
- */
 export class EventoEntity {
   /** Identificador único del evento */
   id: number;
